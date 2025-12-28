@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌸 Your Ideal Date Planner 🌸</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(to bottom, #FFB6C1, #FFC0CB);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #FF69B4;
+            font-size: 2.5em;
+        }
+        .question {
+            display: none;
+            margin-bottom: 20px;
+        }
+        .question.active {
+            display: block;
+        }
+        label {
+            display: block;
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #FF69B4;
+            border-radius: 10px;
+            font-size: 1em;
+            margin-top: 5px;
+            font-family: inherit;
+        }
+        button {
+            background: #FF69B4;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin: 10px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #FF1493;
+        }
+        .summary {
+            display: none;
+            background: #FFFACD;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .emoji {
+            font-size: 2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌸 Plan Your Dream Date! 🌸</h1>
+        <p>Share your thoughts in your own words – no pressure, just fun! If you're shy, feel free to skip or say as little as you want. Let's build your perfect date together. 💖</p>
+        
+        <div id="questionnaire">
+            <div class="question active" id="q1">
+                <h2>How would you like your ideal date to start? 🏠</h2>
+                <label for="start">If you're comfortable sharing, tell me in your own words (e.g., a quiet walk or a surprise note):</label>
+                <input type="text" id="start" placeholder="Type here... or leave blank!">
+                <button onclick="nextQuestion(1)">Next ➡️</button>
+            </div>
+            
+            <div class="question" id="q2">
+                <h2>Where do you wanna go or what activity sounds fun? 🌍</h2>
+                <label for="location">Share your dream spot or idea (e.g., a cozy park, museum, or beach):</label>
+                <input type="text" id="location" placeholder="Your thoughts here...">
+                <button onclick="nextQuestion(2)">Next ➡️</button>
+            </div>
+            
+            <div class="question" id="q3">
+                <h2>What do you want to eat or drink? 🍕</h2>
+                <label for="food">Tell me your favorites or cravings (e.g., pizza, ice cream, or something special):</label>
+                <input type="text" id="food" placeholder="Foodie dreams?">
+                <button onclick="nextQuestion(3)">Next ➡️</button>
+            </div>
+            
+            <div class="question" id="q4">
+                <h2>Movie or no? 🎥</h2>
+                <label for="movie">Would you like a movie? If yes, what kind? If no, what instead? (e.g., rom-com or a game night):</label>
+                <input type="text" id="movie" placeholder="Movie vibes or alternatives?">
+                <button onclick="nextQuestion(4)">Next ➡️</button>
+            </div>
+            
+            <div class="question" id="q5">
+                <h2>Photo booth or no? 📸</h2>
+                <label for="photobooth">Do you want a photo booth? Why or why not? (e.g., fun memories or too cheesy?)</label>
+                <input type="text" id="photobooth" placeholder="Your take on photos?">
+                <button onclick="nextQuestion(5)">Next ➡️</button>
+            </div>
+            
+            <div class="question" id="q6">
+                <h2>Flowers or pasalubong? 🌹</h2>
+                <label for="gift">Flowers, pasalubong (gifts/treats), or something else? What would make you smile?</label>
+                <input type="text" id="gift" placeholder="Gift ideas?">
+                <button onclick="nextQuestion(6)">Next ➡️</button>
+            </div>
+            
+            <div class="question" id="q7">
+                <h2>What souvenir do you want? 🎁</h2>
+                <label for="souvenir">Any special souvenir or memento? (e.g., a keychain or photo):</label>
+                <input type="text" id="souvenir" placeholder="Souvenir wishes?">
+                <button onclick="nextQuestion(7)">Next ➡️</button>
+            </div>
+            
+            <div class="question" id="q8">
+                <h2>How would you like it to end? 🌙</h2>
+                <label for="end">Wrap it up your way (e.g., stargazing, a hug, or quiet time):</label>
+                <input type="text" id="end" placeholder="Perfect ending?">
+                <button onclick="showSummary()">Finish & See Your Date! 🎊</button>
+            </div>
+        </div>
+        
+        <div class="summary" id="summary">
+            <h2>Your Ideal Date Summary 💕</h2>
+            <p id="dateSummary"></p>
+            <button onclick="resetForm()">Plan Another Date! 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = 1;
+        const answers = {};
+
+        function nextQuestion(qNum) {
+            const input = document.getElementById(['start', 'location', 'food', 'movie', 'photobooth', 'gift', 'souvenir', 'end'][qNum - 1]);
+            answers[['start', 'location', 'food', 'movie', 'photobooth', 'gift', 'souvenir', 'end'][qNum - 1]] = input.value || "(Skipped – that's okay!)";
+            document.getElementById('q' + qNum).classList.remove('active');
+            currentQuestion++;
+            document.getElementById('q' + currentQuestion).classList.add('active');
+        }
+
+        function showSummary() {
+            const input = document.getElementById('end');
+            answers.end = input.value || "(Skipped – that's okay!)";
+            document.getElementById('questionnaire').style.display = 'none';
+            let summary = "🌟 Your dream date starts with: " + answers.start + ". ";
+            summary += "You'll head to: " + answers.location + ". ";
+            summary += "For food, you'll enjoy: " + answers.food + ". ";
+            summary += "About a movie: " + answers.movie + ". ";
+            summary += "Photo booth thoughts: " + answers.photobooth + ". ";
+            summary += "Gifts like flowers or pasalubong: " + answers.gift + ". ";
+            summary += "A souvenir idea: " + answers.souvenir + ". ";
+            summary += "And it ends with: " + answers.end + ". Sounds like a perfect, personal adventure! 💖";
+            document.getElementById('dateSummary').innerText = summary;
+            document.getElementById('summary').style.display = 'block';
+        }
+
+        function resetForm() {
+            currentQuestion = 1;
+            Object.keys(answers).forEach(key => answers[key] = "");
+            document.querySelectorAll('input').forEach(inp => inp.value = '');
+            document.querySelectorAll('.question').forEach(q => q.classList.remove('active'));
+            document.getElementById('q1').classList.add('active');
+            document.getElementById('summary').style.display = 'none';
+            document.getElementById('questionnaire').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
